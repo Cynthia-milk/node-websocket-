@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <style>
+        .title{
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        }
+        form{
+            position: fixed;
+       bottom:0;
+       left: 0;
+       width: 100%;
+       background: #fff;
+        }
+        .form-group{
+      
+       display: flex;
+       
+   }
+   .form-control{
+    display: flex;
+    flex: 3;
+    margin-right: 5px;
+   }
+   .list-unstyled{
+       padding: 11px 15px;
+   }
+   .list-unstyled>li{
+       padding:20px 0;
+       overflow: hidden;
+   }
+   .headImg{
+       display: block;
+       margin-right: 15px;
+       float: left;
+   }
+   .img-rounded{
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+   }
+   .chat-text{
+    display:block;
+    background: #5db75c;
+    padding: 15px;
+    border-radius: 5px;
+    position: relative;
+    word-break: break-word;
+    max-width:275px;
+    float: left;
+    min-height: 49px;
+    
+   }
+   .chat-text:after{
+    content: '';
+    margin-left: 15px;
+    position: absolute;
+    left: -42px;
+    top: 50%;
+    width: 0;
+    height: 0;
+  
+    transform: translate(0,-15px);
+    border-width: 15px;
+    border-style: solid;
+    border-color: transparent #5db75c transparent transparent;
+   }
+   </style>
+</head>
+
+<body>
+    <div class="title text-center">请叫我小姐姐</div>
+    <ul id="messages" class="list-unstyled"></ul>
+    <form>
+        <div class="form-group">
+
+            <input type="text" class="form-control" id="msg">
+            <button type="submit" class="btn btn-success">send</button>
+        </div>
+
+
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+            let socket = io();
+            $('form').submit(function () {
+                socket.emit('chat message', $("#msg").val());
+                $('#msg').val();
+                return false;
+            })
+            socket.on('chat message', function (msg) {
+                let str =
+                    `<span class="headImg"><img src="/images/headImg.jpg" class="img-rounded"/></span><span class="chat-text">${msg}</span>`
+                $('#messages').append($('<li>').html(str));
+            });
+        })
+    </script>
+</body>
+
+</html>
